@@ -16,4 +16,6 @@ public interface IUser {
     public void setCompany(ITaxiCompany company);
     public String toString();
 
+    // this should stay the same, there are separate users in a ride share instance 
+
 }

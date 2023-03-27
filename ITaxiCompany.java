@@ -11,6 +11,7 @@ public interface ITaxiCompany {
     
     public void arrivedAtPickupLocation(IVehicle vehicle);
     public void arrivedAtDropoffLocation(IVehicle vehicle);
+    // update this method with an if statement regarding if the ride is shared 
         
     }
 

@@ -11,6 +11,7 @@ public class Taxi extends Vehicle {
     }        
     
     @Override
+    // update this for billing if the ride is shared -- alternatively just call updatebilling() and add a new cost less 
     public int calculateCost() {
         return super.calculateCost() * 2;
     }

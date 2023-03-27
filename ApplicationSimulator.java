@@ -79,6 +79,8 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     /**
      * setter method: prints method for observer 
      */
+
+     // TODO --> maybe make a change in observer to give a message to the user that a ride share is possible 
     public void updateObserver(String message) {
         System.out.println(message);
     }

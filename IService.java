@@ -4,6 +4,8 @@ package taxify.sprint3;
  */
 public interface IService {
 
+
+     // todo --> maybe add the ride share method in Iservice / the service class 
     public IUser getUser();
     public ILocation getPickupLocation();
     public ILocation getDropoffLocation();
@@ -13,5 +15,5 @@ public interface IService {
     public String toString();
     
 
-    // testing
+   
 }

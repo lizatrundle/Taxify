@@ -108,6 +108,12 @@ public abstract class Vehicle implements IVehicle {
         this.route = setDrivingRouteToDestination(service.getPickupLocation(), this.destination);
         this.status = VehicleStatus.SERVICE;
 
+
+
+        // maybe this is where we should add an if check to see if ride share would be possible 
+        // ride share option doesnt come up until the first user is in service 
+        // also notifys the user requesting a service 
+        // so in request service method, maybe check if there is a user nearby, and then notify both users 
     }
 
 
@@ -123,7 +129,12 @@ public abstract class Vehicle implements IVehicle {
         this.statistics.updateDistance(this.service.calculateDistance());
         this.statistics.updateServices();
         
+          
         // if the service is rated by the user, update statistics
+
+        // !!!!!
+        // update the service based on both users, make a new method to add two users to a vehicle 
+        // !!!!!
         
         if (this.service.getStars() != 0) {
             this.statistics.updateStars(this.service.getStars());
