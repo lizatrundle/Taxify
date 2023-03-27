@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 public interface ISubject {
     

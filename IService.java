@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 /**
  * Service implements IService, provides the services of the taxi company -- services of the app, how it changes 
  */

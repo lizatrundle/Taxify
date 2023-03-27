@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 /**
  * class Shuttle extends abstract class Vehicle 

@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 /**
  * test program to test changes made to taxify application
@@ -7,7 +7,7 @@ package taxify.sprint3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 public class TestProgram {
 

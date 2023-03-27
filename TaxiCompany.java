@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 import java.util.List;
 

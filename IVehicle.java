@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 /**
  * Vehicle implements IVehicle -- from vehicle comes taxi, shuttle etc 
@@ -15,7 +15,7 @@ public interface IVehicle {
 
 
     // add new : something like this?? 
-    public IRideShare getShared();
+    // public IRideShare getShared();
 
 
     public void setCompany(ITaxiCompany company);

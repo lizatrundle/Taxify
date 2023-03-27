@@ -1,4 +1,4 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
 /**
  * Statistics implmements IStatistics, gives stats of the app

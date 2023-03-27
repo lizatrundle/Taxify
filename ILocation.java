@@ -1,8 +1,7 @@
-package taxify.sprint3;
+package taxify.Taxify;
 
-/**
- * Interface Ilocation is implemented by Location, provides the coordinates of the current string
- */
+// Interface Ilocation is implemented by Location, provides the coordinates of the current string
+ 
 public interface ILocation {
     
     public int getX();
