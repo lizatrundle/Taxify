@@ -47,8 +47,7 @@ public abstract class Vehicle implements IVehicle {
      * getter method: returns users pickup location, as an Ilocation object (x,y) coordinate
      */
     public ILocation getLocation() {
-        return this.location;
-        
+        return this.location; 
     }
 
     @Override

@@ -10,6 +10,7 @@ import java.util.Random;
  *  application to calculate the distance between
  *  two locations or set a random location
  */
+
 public class ApplicationLibrary {
 
     // width and height of the grid for choosing taxis 
@@ -17,8 +18,6 @@ public class ApplicationLibrary {
     private static final int width = 10;
     private static final int height = 10;   
     
-
-
 
     // random generator to assign 
     public static int rand() {
@@ -50,7 +49,6 @@ public class ApplicationLibrary {
         ILocation destination;
         
         do {
-            
             destination = new Location(rand(width), rand(height));
             
         } while (distance(location, destination) < 3);  

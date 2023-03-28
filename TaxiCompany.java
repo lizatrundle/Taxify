@@ -52,7 +52,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     /**
      * method for users to request a ride (service)
      */
-    public boolean requestService(int user) {
+    public boolean provideService(int user) {
         int userIndex = indexOfUserId(user);        
         int vehicleIndex = findFreeVehicle();
         

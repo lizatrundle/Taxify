@@ -12,8 +12,6 @@ public interface IVehicle {
     public IService getService();
     public IStatistics getStatistics();
 
-
-
     // add new : something like this?? 
     // public IRideShare getShared();
 

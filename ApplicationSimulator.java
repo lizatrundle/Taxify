@@ -62,7 +62,7 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     public void requestService() {      
         for (IUser u : this.users){
             if (u.getService()== false){
-                this.company.requestService(u.getId());
+                this.company.provideService(u.getId());
                 break;
             }}
     }
