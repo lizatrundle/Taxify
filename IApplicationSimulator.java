@@ -1,5 +1,4 @@
-package taxify.final;
-
+package taxify.Taxify;
 public interface IApplicationSimulator {
 
     public void show();

@@ -1,5 +1,9 @@
 package taxify.Taxify;
 
+
+/**
+ *  The interface ISubject declares methods to add and notify observers.
+ */
 public interface ISubject {
     
     public void addObserver(IObserver observer);

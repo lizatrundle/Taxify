@@ -7,6 +7,6 @@ package taxify.Taxify;
  */
 public enum VehicleStatus {
 
-    FREE, PICKUP, SERVICE
+    FREE, PICKUP, RIDESHARE, SERVICE
 
 }

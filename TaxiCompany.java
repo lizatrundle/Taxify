@@ -59,6 +59,10 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
         // if there is a free vehicle, assign a random pickup and drop-off location to the new service
         // the distance between the pickup and the drop-off location should be at least 3 blocks
         
+
+
+
+
         if (vehicleIndex != -1) {
             ILocation origin, destination;
             

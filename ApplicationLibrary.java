@@ -1,7 +1,9 @@
 
-package taxify.final;
+package taxify.Taxify;
 
 import java.util.Random;
+
+
 
 /**
  * this class is a small library that provides functions needed by the
@@ -13,7 +15,9 @@ public class ApplicationLibrary {
     // width and height of the grid for choosing taxis 
 
     private static final int width = 10;
-    private static final int height = 10;    
+    private static final int height = 10;   
+    
+
 
 
     // random generator to assign 
@@ -23,6 +27,7 @@ public class ApplicationLibrary {
         return random.nextInt(9767);
     }
     
+
 
     //random generator with a max cap 
     public static int rand(int max) {
