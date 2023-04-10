@@ -1,4 +1,6 @@
 package taxify.Taxify;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -10,12 +12,25 @@ public class Service implements IService {
     private ILocation pickup;
     private ILocation dropoff;
     private int stars;
+    private boolean shared;
     
-    public Service(IUser user, ILocation pickup, ILocation dropoff) {
-        this.user = user;
+    public Service(IUser user, ILocation pickup, ILocation dropoff, boolean shared) {
+        // this.user = new ArrayList<IUser>();
+        this.user =user;
         this.pickup = pickup;
         this.dropoff = dropoff; 
         this.stars = 0;
+        this.shared = false;
+    }
+
+    @Override
+    public boolean getShared() {
+        return this.shared;
+    }
+
+    @Override
+    public void setShared(boolean shared) {
+        this.shared = shared;
     }
     
     @Override

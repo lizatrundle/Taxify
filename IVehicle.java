@@ -1,4 +1,6 @@
 package taxify.Taxify;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Vehicle implements IVehicle -- from vehicle comes taxi, shuttle etc 
@@ -9,30 +11,36 @@ public interface IVehicle {
     public int getId();
     public ILocation getLocation();
     public ILocation getDestination();
-    public IService getService();
+    public List<IService> getService();
     public IStatistics getStatistics();
-
-    // add new : something like this?? 
-    // public IRideShare getShared();
-
-
     public void setCompany(ITaxiCompany company);
     public void pickService(IService service);
 
-    // update this to check for ride share 
+   
     public void startService();
-    // update this to check for ride share 
+    
     public void endService();
-    // update this to check for ride share 
+   
     public void notifyArrivalAtPickupLocation();
-    // update this to check for ride share 
+    
     public void notifyArrivalAtDropoffLocation();
-
     public boolean isFree();
     public VehicleStatus getStatus();
     public void move();
-    public int calculateCost();
-    public String showDrivingRoute();
+
+    // new : add parameter to caclulate cost so that if the ride is shared, the billing is updated with the correct amount
+    public int calculateCost(IService service);
+
+    //updated this ebcause it was showing incorrect route when vehicles werent free
+    public String showDrivingRoute(List<ILocation> route);
     public String toString();
+
+    // added methods: in vehicle to use in taxicompany to make easier checking for rideshare 
+    public int getDistanceFromPickUp(IService service);
+    public int getDistanceFromDropoff(IService service);
+
+    // add this to keep track of the current service --> since there is now a list of services
+    public IService getClosestService();
+
     
 }

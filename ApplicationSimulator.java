@@ -63,6 +63,7 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         for (IUser u : this.users){
             if (u.getService()== false){
                 this.company.provideService(u.getId());
+                // maygbe change this to users request service
                 break;
             }}
     }
@@ -79,8 +80,6 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     /**
      * setter method: prints method for observer 
      */
-
-     // TODO --> maybe make a change in observer to give a message to the user that a ride share is possible 
     public void updateObserver(String message) {
         System.out.println(message);
     }

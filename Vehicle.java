@@ -12,7 +12,8 @@ import java.util.List;
 public abstract class Vehicle implements IVehicle {
     private int id;
     private ITaxiCompany company;
-    private IService service;
+    //new --> changed to a list isntead of a single instance
+    private List<IService> service;
     private VehicleStatus status;
     private ILocation location;
     private ILocation destination;
@@ -25,7 +26,7 @@ public abstract class Vehicle implements IVehicle {
      */
     public Vehicle(int id, ILocation location) {        
         this.id = id;
-        this.service = null;
+        this.service = new ArrayList<IService>(); // initialize the array list (it could only contain one)
         this.status = VehicleStatus.FREE;
         this.location = location;        
         this.destination = ApplicationLibrary.randomLocation(this.location);
@@ -63,7 +64,7 @@ public abstract class Vehicle implements IVehicle {
      /**
      * getter method: returns service
      */
-    public IService getService() {
+    public List<IService> getService() {
        return this.service;
     }
     
@@ -88,11 +89,12 @@ public abstract class Vehicle implements IVehicle {
      * pick a service, set destination to the service pickup location, and status to "pickup"
      */
     public void pickService(IService service) {
-        
-        this.service = service;
+
+        this.service.add(service);
         this.destination = service.getPickupLocation();
         this.route = setDrivingRouteToDestination(this.location, this.destination);
         this.status = VehicleStatus.PICKUP;
+
     }
 
     @Override
@@ -101,53 +103,56 @@ public abstract class Vehicle implements IVehicle {
      * set status to "service"
      */
     public void startService() {
-        
-        this.destination = service.getDropoffLocation();
+         // need a method to get the current service -- since we made it an array list
+        this.status = VehicleStatus.SERVICE;  
+        this.destination = this.getClosestService().getDropoffLocation();
         //used get pickuplocation() as start, could alternatively be this.location
-        this.route = setDrivingRouteToDestination(service.getPickupLocation(), this.destination);
-        this.status = VehicleStatus.SERVICE;
-
-
-
-        // maybe this is where we should add an if check to see if ride share would be possible 
-        // ride share option doesnt come up until the first user is in service 
-        // also notifys the user requesting a service 
-        // so in request service method, maybe check if there is a user nearby, and then notify both users 
+        this.route = setDrivingRouteToDestination(this.location, this.destination);
+        
     }
-
-
 
     @Override
     /** 
      * ending a service, resetting all the settings
      */
     public void endService() {
+
         // update vehicle statistics
+
+        IService service = this.getClosestService();
         
-        this.statistics.updateBilling(this.calculateCost());
-        this.statistics.updateDistance(this.service.calculateDistance());
+        this.statistics.updateBilling(this.calculateCost(service));
+        this.statistics.updateDistance(service.calculateDistance());
         this.statistics.updateServices();
         
-          
         // if the service is rated by the user, update statistics
-
-        // !!!!!
-        // update the service based on both users, make a new method to add two users to a vehicle 
-        // !!!!!
         
-        if (this.service.getStars() != 0) {
-            this.statistics.updateStars(this.service.getStars());
+        if (service.getStars() != 0) {
+            this.statistics.updateStars(service.getStars());
             this.statistics.updateReviews();
         }
+    
         
         // set service to null, and status to "free"
         
-        this.service = null;
-        this.destination = ApplicationLibrary.randomLocation(this.location);
-        this.route = setDrivingRouteToDestination(this.location, this.destination);
-        this.status = VehicleStatus.FREE;
-    }
+        this.service.remove(service); 
 
+        if (this.service.size() ==0){
+            this.destination = ApplicationLibrary.randomLocation(this.location);
+            this.status = VehicleStatus.FREE;
+            this.route = setDrivingRouteToDestination(this.location, this.destination);
+
+
+        }
+        else{
+            this.destination = this.getClosestService().getDropoffLocation();
+            this.status = VehicleStatus.SERVICE;
+            this.route = setDrivingRouteToDestination(this.location, this.destination);
+
+        
+    }
+}
+    
     @Override
     /**
      * notifying the company that the vehicle is at the pickup location,
@@ -195,23 +200,32 @@ public abstract class Vehicle implements IVehicle {
      * gets the next location from the driving route
      */
     public void move() {
+
+        // to do --> fix this for two cars
         
-        
-        this.location = this.route.get(0);        
+        this.location = this.route.get(0);  
+              
         this.route.remove(0);
 
+
+
         if (this.route.isEmpty()) {
-            if (this.service == null) {
+            if (this.service.size() == 0) {
                 // the vehicle continues its random route
 
                 this.destination = ApplicationLibrary.randomLocation(this.location);
                 this.route = setDrivingRouteToDestination(this.location, this.destination);
+               
+
             }
             else {
+                
+                IService service = this.getClosestService();
                 // checks if the vehicle has arrived to a pickup or drop off location
 
-                ILocation origin = this.service.getPickupLocation();
-                ILocation destination = this.service.getDropoffLocation();
+                ILocation origin = service.getPickupLocation();
+
+                ILocation destination = service.getDropoffLocation();
 
                 if (this.location.getX() == origin.getX() && this.location.getY() == origin.getY()) {
 
@@ -220,13 +234,10 @@ public abstract class Vehicle implements IVehicle {
                 } else if (this.location.getX() == destination.getX() && this.location.getY() == destination.getY()) {
 
                     notifyArrivalAtDropoffLocation();
-                    // endService();
-                    // this.endService();
-
-                }        
+                }
             }
+          }
         }
-    }
 
     @Override
     /**
@@ -235,20 +246,23 @@ public abstract class Vehicle implements IVehicle {
      * are calculated in their own methods 
      *
      */
-    public int calculateCost() {
-        
-        return this.service.calculateDistance();
-    
+    public int calculateCost(IService service) {
+
+        if (service.getShared()==true){
+            return (service.calculateDistance()-2);
+        }
+        else return service.calculateDistance();
     }
+    
 
     @Override
     /**
      * shows the route of the car in string format 
      */
-    public String showDrivingRoute() {
+    public String showDrivingRoute(List<ILocation> route) {
         String s = "";
        
-           for (ILocation l : this.route)
+           for (ILocation l : route)
                s = s + l.toString() + " ";
        
            return s;
@@ -256,12 +270,23 @@ public abstract class Vehicle implements IVehicle {
 
     @Override
      /**
-     * turns entire method to string
+     * turns entire method to string --> changed this to incorporate the new rideshare
      */
     public String toString() {
-        return this.id + " at " + this.location + " driving to " + this.destination +
-               ((this.status == VehicleStatus.FREE) ? " is free with path " + showDrivingRoute(): ((this.status == VehicleStatus.PICKUP) ? " to pickup user " +
-               this.service.getUser().getId() : " in service "));
+
+        if (this.service.size()==1){
+            return this.id + " at " + this.location + " driving to " + this.destination +
+            ((this.status == VehicleStatus.FREE) ? " is free with path " + showDrivingRoute(this.route): ((this.status == VehicleStatus.PICKUP) ? " to pickup user " + this.getClosestService().getUser().getId() : " in service "));
+                  
+        
+        }
+        else{
+            return this.id + " at " + this.location + " driving to " + this.destination +
+            ((this.status == VehicleStatus.FREE) ? " is free with path " + showDrivingRoute(this.route): ((this.status == VehicleStatus.PICKUP) ? " to pickup user " + this.getClosestService().getUser().getId() : " in service ")) + " shared ride with user" ;
+         
+            
+
+        }
     }
     
     private List<ILocation> setDrivingRouteToDestination(ILocation location, ILocation destination) {
@@ -290,4 +315,50 @@ public abstract class Vehicle implements IVehicle {
         
         return route;
     }       
+
+    @Override
+    public int getDistanceFromPickUp(IService service) {
+        return Math.abs(this.location.getX() -  service.getPickupLocation().getX()) + Math.abs(this.location.getY() -  service.getPickupLocation().getY());
+      }
+
+      @Override
+      public int getDistanceFromDropoff(IService service) {
+        return Math.abs(this.location.getX() - service.getDropoffLocation().getX()) + Math.abs(this.location.getY() - service.getDropoffLocation().getY());
+      }
+
+    @Override
+    public IService getClosestService() {
+        // returns the current and closest service that the vehicle is in (can be more than one)_
+
+
+        if (this.status == VehicleStatus.PICKUP){
+            // return the most recently added service
+            IService last_service = this.service.get(this.service.size() - 1);
+            return last_service;
+
+        }
+        else if (this.status == VehicleStatus.SERVICE){
+
+          IService service = null;
+          int min = 1000000;
+    
+          for (IService serv : this.service) {
+            
+            if (this.getDistanceFromDropoff(serv)< min) {
+              min = this.getDistanceFromDropoff(serv);
+              service = serv;
+            }
+
+          }
+          return service;
+        }
+        return null;
+        
+    
+      }
+    
+
+
+
 }
+

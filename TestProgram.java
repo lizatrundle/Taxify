@@ -16,21 +16,21 @@ public class TestProgram {
       //Declare a list of users. Instantiate at least 15 users
       List<IUser> users = new ArrayList<IUser>();
 
-      IUser liza = new User(1,"liza", "trundle");
-      IUser ben = new User(2,"ben", "smith");
-      IUser max = new User(3,"max", "moore");
-      IUser emma = new User(4,"emma", "wayne");
-      IUser nate = new User(5,"nate", "stone");
-      IUser rachel = new User(6,"rachel", "wilson");
-      IUser arianna = new User(7,"arianna", "santiago");
-      IUser chris = new User(8,"chris", "wack");
-      IUser james = new User(9,"james", "gresham");
-      IUser kelly = new User(10,"kelly", "kat");
-      IUser sam = new User(11, "sam", "davenport");
-      IUser cameron = new User(12, "cameron", "green");
-      IUser teddy = new User(13, "teddy", "donahue");
-      IUser lily = new User(14, "lily", "grayson");
-      IUser catherine = new User(15, "catherine", "frank");
+      IUser liza = new User(1,"liza", "trundle",ApplicationLibrary.randomLocation()); 
+      IUser ben = new User(2,"ben", "smith", ApplicationLibrary.randomLocation());
+      IUser max = new User(3,"max", "moore", ApplicationLibrary.randomLocation());
+      IUser emma = new User(4,"emma", "wayne", ApplicationLibrary.randomLocation());
+      IUser nate = new User(5,"nate", "stone", ApplicationLibrary.randomLocation());
+      IUser rachel = new User(6,"rachel", "wilson", ApplicationLibrary.randomLocation());
+      IUser arianna = new User(7,"arianna", "santiago", ApplicationLibrary.randomLocation());
+      IUser chris = new User(8,"chris", "wack", ApplicationLibrary.randomLocation());
+      IUser james = new User(9,"james", "gresham", ApplicationLibrary.randomLocation());
+      IUser kelly = new User(10,"kelly", "kat", ApplicationLibrary.randomLocation());
+      IUser sam = new User(11, "sam", "davenport", ApplicationLibrary.randomLocation());
+      IUser cameron = new User(12, "cameron", "green", ApplicationLibrary.randomLocation());
+      IUser teddy = new User(13, "teddy", "donahue", ApplicationLibrary.randomLocation());
+      IUser lily = new User(14, "lily", "grayson", ApplicationLibrary.randomLocation());
+      IUser catherine = new User(15, "catherine", "frank", ApplicationLibrary.randomLocation());
 
       users.add(liza);
       users.add(ben);

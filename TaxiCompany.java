@@ -1,6 +1,7 @@
 package taxify.Taxify;
 
 import java.util.List;
+import java.util.ArrayList;
 
 
 /**
@@ -11,6 +12,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     private String name;
     private List<IUser> users;
     private List<IVehicle> vehicles;
+    //keep track of total users and vehicles 
     private int totalServices;
     private IObserver observer;
     
@@ -31,6 +33,8 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
         for (int i=0; i<this.vehicles.size(); i++)
             this.vehicles.get(i).setCompany(this);
     }
+    
+
     
     @Override
     /**
@@ -53,16 +57,13 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
      * method for users to request a ride (service)
      */
     public boolean provideService(int user) {
+
         int userIndex = indexOfUserId(user);        
         int vehicleIndex = findFreeVehicle();
         
         // if there is a free vehicle, assign a random pickup and drop-off location to the new service
         // the distance between the pickup and the drop-off location should be at least 3 blocks
-        
-
-
-
-
+           
         if (vehicleIndex != -1) {
             ILocation origin, destination;
             
@@ -71,19 +72,73 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
                 origin = ApplicationLibrary.randomLocation();
                 destination = ApplicationLibrary.randomLocation(origin);
                 
-            } while (ApplicationLibrary.distance(origin, this.vehicles.get(vehicleIndex).getLocation()) < 3);
-            
+            } while (ApplicationLibrary.distance(origin, destination) < 3);
+            //this.vehicles.get(vehicleIndex).getLocation()
             // update the user status
                        
             this.users.get(userIndex).setService(true);
             
             // create a service with the user, the pickup and the drop-off location
 
-            Service service = new Service(this.users.get(userIndex), origin, destination);
+            Service service = new Service(this.users.get(userIndex), origin, destination, false);
+            
+            // shared ride specifics 
+
+            int shared_vehicle = -1;
+            int distance_to_shared = 100000;
+
+
+            // determining "close" as manhattan distance of 2
+            for (IVehicle ve: this.vehicles){
+                if (ve.getStatus() == VehicleStatus.SERVICE && ve.getDistanceFromPickUp(service) < distance_to_shared && ve.getDistanceFromPickUp(service) >= 2) {
+                    distance_to_shared = (ve.getDistanceFromPickUp(service));
+                    shared_vehicle = ve.getId();
+                  }
+                }
+
+
+
+            // randomizing ride share 
+             
+
+
+
+        if (shared_vehicle !=-1 && ApplicationLibrary.rand() % 2 == 0){
+            shared_vehicle --; 
+            // getting an index out of bounds error so tried to decrement index 
+                
+    
+            IVehicle shared = this.vehicles.get(shared_vehicle);
+                                                                                // this service needs to be charnged to current service 
+            if (shared.getDistanceFromPickUp(service) < shared.getDistanceFromDropoff(shared.getClosestService())){
+                
+                  if (shared.getService().size() == 1){
+                    shared.pickService(service);
+                    service.setShared(true);
+                  }  
+             
+            notifyObserver("User " + this.users.get(userIndex).getId() + " requests a service from " + service.toString() + ", the ride is assigned to " +
+            shared.getClass().getSimpleName() + " " + shared.getId() + " at location " +
+            shared.getLocation().toString() + " and is a shared ride. ");
+            
+            // update the counter of services
+            
+            this.totalServices++;
+          
+            return true;
+
+            }}
+
+
+            this.users.get(userIndex).setService(true);
+            
+            // create a service with the user, the pickup and the drop-off location
+
+            Service not_shared_service = new Service(this.users.get(userIndex), origin, destination, false);
             
             // assign the new service to the vehicle
             
-            this.vehicles.get(vehicleIndex).pickService(service);            
+            this.vehicles.get(vehicleIndex).pickService(not_shared_service);            
              
             notifyObserver("User " + this.users.get(userIndex).getId() + " requests a service from " + service.toString() + ", the ride is assigned to " +
                            this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
@@ -95,9 +150,12 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
           
             return true;
         }
-        
-        return false;
-    }
+    return false;
+}
+
+    
+
+    
 
     @Override
     /**
@@ -105,7 +163,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
      */
     public void arrivedAtPickupLocation(IVehicle vehicle) {
         
-        notifyObserver(String.format("%-8s",vehicle.getClass().getSimpleName()) + vehicle.getId() + " loads user " + vehicle.getService().getUser().getId());
+        notifyObserver(String.format("%-8s",vehicle.getClass().getSimpleName()) + vehicle.getId() + " loads user " + vehicle.getClosestService().getUser().getId());
     }
     
     @Override
@@ -114,7 +172,12 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
      */
     public void arrivedAtDropoffLocation(IVehicle vehicle) {
         
-        IService service = vehicle.getService();       
+        IService service = vehicle.getClosestService();   
+        
+        // check which service to return 
+
+
+        // fix this 
         int user = service.getUser().getId();
         int userIndex = indexOfUserId(user);
        
@@ -147,8 +210,9 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     }
 
      /**
-     *  finds a free vehicle and returns the index of the vehicle in the list, otherwise it returns -1
+     *  finds all free vehicles and returns the index of the vehicle in the list, otherwise it returns -1
      */
+    //update this so that it returns all free vehicles not just one
     private int findFreeVehicle() {
         int count = 0;
 
@@ -161,7 +225,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
 
             return -1;
     }
-    
+
      /**
      *  finds the index of a user with the input id in the list, otherwise it returns -1
      */
@@ -176,4 +240,6 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     }
 
             return -1;
-    }}
+    }
+
+        }

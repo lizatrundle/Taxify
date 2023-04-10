@@ -12,12 +12,17 @@ public class User implements IUser {
     private String lastName;
     private ITaxiCompany company;
     private boolean service;
+    // new
+    private ILocation location;
     
-    public User(int id, String firstName, String lastName) {
+
+    //new
+    public User(int id, String firstName, String lastName, ILocation location) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.service = false;
+        this.location = location;
     }
     
     @Override

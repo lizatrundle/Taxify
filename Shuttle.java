@@ -12,8 +12,8 @@ public class Shuttle extends Vehicle {
     
     @Override
      // update this for billing if the ride is shared -- alternatively just call updatebilling() and add a new cost less 
-    public int calculateCost() {
-        return (int) (super.calculateCost() * 1.5);
+    public int calculateCost(IService service) {
+        return (int) (super.calculateCost(service) * 1.5);
     }
 
     @Override
