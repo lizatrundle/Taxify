@@ -17,4 +17,5 @@ public interface IStatistics {
     public void updateDistance(int distance);
     public void updateBilling(int billing);
     
+    
 }
