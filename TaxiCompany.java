@@ -96,12 +96,8 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
                   }
                 }
 
-
-
             // randomizing ride share 
-             
-
-
+            
 
         if (shared_vehicle !=-1 && ApplicationLibrary.rand() % 2 == 0){
             shared_vehicle --; 
